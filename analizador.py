@@ -5,7 +5,7 @@ from textblob import TextBlob
 
 # --- Autenticación con Google Sheets ---
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-credentials = ServiceAccountCredentials.from_json_keyfile_name("credenciales.json", scope)
+credentials = ServiceAccountCredentials.from_json_keyfile_name("key.json", scope)
 client = gspread.authorize(credentials)
 
 # --- Abrir hoja ---
@@ -31,4 +31,5 @@ while True:
         sheet.update('B3', emocion)
         print(f"Texto nuevo: '{texto}' → Emoción: {emocion}")
         valor_anterior = texto
+
     time.sleep(10)
