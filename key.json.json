@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "projectcomfy-477813",
+  "private_key_id": "c76b9f8828f6f3fc3705239ae0ade8b00e83a509",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCTo48Hxddv5h8s\n4O5gPb2vC2YPdHLSrBmkc54pebyfJ8sTdRBOia35c9xPePnrBOzUkPkT8MoQ5+Aw\nlWJAaZ5gDVWRcwgeIK06q3wacB0Pv7/Snk9IV4i9hVMIcxxQM0bLWAYSpE9po6/u\nLHRQ76FzKGe9SpeiFkTatO2Te7xJgZ41XxoV9jKILCncUFPgSnFlo2wCMMn6ApI8\nd/HSeFO+mDR/2eku6WUYRZJXfD/e0ymmlVlvTJqucyq6XK53oGbefoNa46KILSwq\nm16pO3yhgZdBhs/9KmDeyWgA1/bBadEUMAr0lh3JFC2HQkQwgwFIAf3r/NNawT9h\n+IukN+B7AgMBAAECggEABCcKolU7tBkcxMMTOuy+bydBOLhCdIKq4MSJucpQdlXr\nSpuCMmgbI+C3Q4Feq7zcBmlV2bkHjezGEi4mPcz0S4JRTYGwd3YQbHQfTcUPSpg1\nLOQPM2f9RhgmZJ6/a9Gm/f6QHF0eIkjPoKgECE5WunaNkgLmyFEB1Cu+yBh0v5Wu\n3NYZYvN0PSCidrPkHMCIYqjGiLvji2FlmX9RCVr2tC8toLvVohsyYtrbkFfXyBp1\nEmYnk3LqtX6TRHfazXmHHcdyHFlfLGu+bJ8nko8+03LEWRb5mKGYjJHWfH6OGn1y\nnsh2qEyLd5KXZL8sd0sIdfC+ZAVoNhgrrQt4saKOeQKBgQDNdPMP7HDfNsqgdV2o\neJISnDjPNqXofBvbu9Hl7i2/2erVXDP3FhXirz1IXSY6gh3jUB2vpJMJ3v90cQGs\nkmAEQYl/K/PvbM0BQjOYH/ZXs6XEv7NHdJ0PkJMBK21llNjVju8b1rI+r8fVOA/S\n7DP5i9BC0TLOQAHd8eZ1RjlTswKBgQC39WkbKw6HG/wc5yC4dDomUZhVSKTFdLcm\nGDGW+LFlsdXTen73XmpdB7ZOAVzLf2xLybitVTfl4zP/ozyG6XgiKEY1Mf6AUa0E\nrbeQTROQzJVsgTnV1XrAfB1W+Awrc3xmG5EzrH5Bt08uzmq6srEWPO/JIvSm6jmW\nIJGBcZx8GQKBgAOSG8NUFaYbeqwNPiJ2bft60ZXwWjPPLGDGQ+CeIhdqfyVUI+cQ\ncDLvXr5KOCbeKgzQUKPD1XZfdMseR6wrIxYP2YbnSacImguCjgj/zTU6/w+LUV9V\njIE/vv5PNeiFDLuxb0Bpm9FxFqUDA2tkBYc5wdXXcu2YuS+VS68QGGD3AoGAd1Wa\nE2fBCuCakd1VmpK7TjRMT7bKPNVUIkA7myZFXiUZAxFJ4Aq9kQ/5sWys184XYKrB\nRKAtnNHg34rzLsmxhub9dHC0GmXhiVFv7QozERHGNRc3f4H3GXrqRYqvylgmcM6d\nSRoy5UqW8VQyZF6bBkQNgTtN3iG/raX+/ivHSbECgYAZUVdF4eDL6UlQGeWKcPXF\n0lOgNA1Iclc1bFod94noUON3XXgjbJ/BTVFmwtF9pYwxoktBtGotk5q8ruu3APBn\n2ibXp0tQ+tbg94Iaf/ujMfzwF/CEBE/bTYoqxY5myGLuoqElt6WFkvW1VBLckZgT\nZrtyZFDq0ueF+S3T6sgQSw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "pythonsheets@projectcomfy-477813.iam.gserviceaccount.com",
+  "client_id": "110171884345998546944",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/pythonsheets%40projectcomfy-477813.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
