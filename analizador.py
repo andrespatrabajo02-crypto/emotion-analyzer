@@ -2,10 +2,11 @@ import time
 import re
 import hashlib
 import logging
+import json  # Para parsear JSON de env var
 from typing import List, Tuple
 import os
 
-# Dependencias externas (instala con: pip install gspread google-auth google-auth-oauthlib textblob deep-translator langdetect openai tenacity)
+# Dependencias externas (instala con: pip install gspread google-auth google-auth-oauthlib textblob deep-translator langdetect openai tenacity vaderSentiment)
 import gspread
 from google.oauth2.service_account import Credentials
 from textblob import TextBlob
@@ -13,8 +14,7 @@ from deep_translator import GoogleTranslator
 from langdetect import detect
 from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential
-import json
-import os
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer  # Nueva: Para análisis más robusto
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -47,6 +47,10 @@ CONECTOR_ENGLISH = r'\b(but|although|however|besides|while|when|because)\b'
 
 PALABRAS_NEGATIVAS = {'miss', 'lonely', 'afraid', 'scared', 'worried', 'pain', 'hurt', 'sad', 'alone', 'anxious', 'nervous'}
 PALABRAS_POSITIVAS = {'hope', 'better', 'grateful', 'thankful', 'happy', 'good', 'great', 'wonderful', 'improve', 'recovering'}
+PALABRAS_FRUSTRACION = {'frustración', 'impaciencia', 'esperas', 'demora', 'lento', 'frustrating', 'impatient', 'waiting', 'delay', 'slow'}  # Específicas para contexto médico (es/en)
+
+# Inicializar VADER
+analyzer = SentimentIntensityAnalyzer()
 
 # ==========================================================
 # ✨ IA: CORREGIR ORTOGRAFÍA, COMAS Y GRAMÁTICA
@@ -119,11 +123,16 @@ def dividir_texto(texto: str, idioma: str) -> List[str]:
 
     return frases_finales
 
-def analizar_emocion(frase: str) -> Tuple[str, float, float]:
-    analisis = TextBlob(frase)
-    polaridad = analisis.sentiment.polarity
-    subjetividad = analisis.sentiment.subjectivity
-
+def analizar_emocion(frase: str) -> Tuple[str, float, float, List[str]]:
+    # VADER para compound y breakdown (más robusto a contrastes)
+    vader_scores = analyzer.polarity_scores(frase)
+    polaridad = vader_scores['compound']  # -1 (neg) a +1 (pos)
+    
+    # TextBlob para subjetividad
+    blob = TextBlob(frase)
+    subjetividad = blob.sentiment.subjectivity
+    
+    # Ajustes por palabras clave (más peso a frustración)
     frase_lower = frase.lower()
     for palabra in PALABRAS_NEGATIVAS:
         if palabra in frase_lower:
@@ -131,19 +140,31 @@ def analizar_emocion(frase: str) -> Tuple[str, float, float]:
     for palabra in PALABRAS_POSITIVAS:
         if palabra in frase_lower:
             polaridad += 0.10
-
+    emociones_multi = []
+    for pal in PALABRAS_FRUSTRACION:
+        if pal in frase_lower:
+            polaridad -= 0.20
+            emociones_multi.append('Frustración 😠')
+    
+    # Clasificación principal (umbral más sensible para mixtos)
     if polaridad >= 0.3:
-        emocion = "Alegría 😄"
+        emocion_principal = "Alegría 😄"
     elif 0.05 <= polaridad < 0.3:
-        emocion = "Tranquilidad 🙂"
+        emocion_principal = "Tranquilidad 🙂"
     elif -0.05 < polaridad < 0.05:
-        emocion = "Neutral 😐"
+        emocion_principal = "Neutral 😐"
     elif -0.3 <= polaridad <= -0.05:
-        emocion = "Tristeza 😔"
+        emocion_principal = "Tristeza 😔"
     else:
-        emocion = "Enojo 😡"
-
-    return emocion, round(polaridad, 2), round(subjetividad, 2)
+        emocion_principal = "Enojo 😡"
+    
+    # Agrega multi si aplica
+    if emociones_multi:
+        emocion_final = f"{emocion_principal} + {', '.join(emociones_multi)}"
+    else:
+        emocion_final = emocion_principal
+    
+    return emocion_final, round(polaridad, 2), round(subjetividad, 2), emociones_multi
 
 def analizar_texto_completo(texto: str) -> str:
     idioma = detectar_idioma(texto)
@@ -151,11 +172,12 @@ def analizar_texto_completo(texto: str) -> str:
     frases = dividir_texto(texto_traducido, idioma)  # Dividir después de traducir
 
     resultados = []
-    for frase in frases:
-        emocion, polaridad, subjetividad = analizar_emocion(frase)
-        # Mantener la frase original para el output, pero usar traducida para análisis
-        frase_original = re.split(r'[.!?]+', texto)[frases.index(frase) % len(re.split(r'[.!?]+', texto))] if frases else frase
-        resultados.append(f"'{frase_original.strip()}' → {emocion} (pol: {polaridad}, subj: {subjetividad})")
+    oraciones_original = re.split(r'[.!?]+', texto)
+    for idx, frase in enumerate(frases):
+        emocion, polaridad, subjetividad, multi = analizar_emocion(frase)
+        # Mapear a frase original (mejorado para evitar index errors)
+        frase_original = oraciones_original[idx % len(oraciones_original)].strip() if oraciones_original else frase
+        resultados.append(f"'{frase_original}' → {emocion} (pol: {polaridad}, subj: {subjetividad})")
 
     return "\n".join(resultados)
 
